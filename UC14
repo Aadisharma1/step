@@ -1,0 +1,81 @@
+import java.util.*;
+
+class PalindromeAlgorithms {
+
+    static boolean stackMethod(String str) {
+        str = str.toLowerCase().replaceAll("\\s+", "");
+        Stack<Character> stack = new Stack<>();
+
+        for (char c : str.toCharArray())
+            stack.push(c);
+
+        for (char c : str.toCharArray())
+            if (c != stack.pop())
+                return false;
+
+        return true;
+    }
+
+    static boolean twoPointerMethod(String str) {
+        str = str.toLowerCase().replaceAll("\\s+", "");
+        int left = 0;
+        int right = str.length() - 1;
+
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right))
+                return false;
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+
+    static boolean recursionMethod(String str) {
+        str = str.toLowerCase().replaceAll("\\s+", "");
+        return recursiveCheck(str, 0, str.length() - 1);
+    }
+
+    static boolean recursiveCheck(String str, int start, int end) {
+        if (start >= end)
+            return true;
+
+        if (str.charAt(start) != str.charAt(end))
+            return false;
+
+        return recursiveCheck(str, start + 1, end - 1);
+    }
+}
+
+public class PalindromePerformanceApp {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        String input = sc.nextLine();
+
+        long start, end;
+
+        start = System.nanoTime();
+        boolean stackResult = PalindromeAlgorithms.stackMethod(input);
+        end = System.nanoTime();
+        long stackTime = end - start;
+
+        start = System.nanoTime();
+        boolean pointerResult = PalindromeAlgorithms.twoPointerMethod(input);
+        end = System.nanoTime();
+        long pointerTime = end - start;
+
+        start = System.nanoTime();
+        boolean recursionResult = PalindromeAlgorithms.recursionMethod(input);
+        end = System.nanoTime();
+        long recursionTime = end - start;
+
+        System.out.println("Stack Method: " + stackResult + " | Time: " + stackTime + " ns");
+        System.out.println("Two Pointer Method: " + pointerResult + " | Time: " + pointerTime + " ns");
+        System.out.println("Recursion Method: " + recursionResult + " | Time: " + recursionTime + " ns");
+
+        sc.close();
+    }
+}
